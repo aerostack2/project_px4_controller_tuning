@@ -1,0 +1,35 @@
+/**:
+  ros__parameters:
+    proportional_limitation : true
+    antiwindup_cte : 0.5
+    alpha: 0.2
+    trajectory_following:
+      position_Kp: 
+        x: 0.0
+        y: 0.0
+        z: 1.0
+      position_Ki:
+        x: 0.0
+        y: 0.0
+        z: 0.1
+      position_Kd: 
+        x: 0.0
+        y: 0.0
+        z: 0.0
+    position_following:
+      position_Kp: 
+        x: 1.5
+        y: 1.5
+        z: 1.5
+      position_Ki:
+        x: 0.05
+        y: 0.05
+        z: 0.05
+      position_Kd: 
+        x: 0.001
+        y: 0.001
+        z: 0.001
+    yaw_speed_controller:
+      Kp: 0.0
+      Ki: 0.0
+      Kd: 0.0

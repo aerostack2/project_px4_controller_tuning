@@ -1,0 +1,9 @@
+{
+    "world": "controller_tuning",
+    "drones": [
+        {
+            "model": "iris_fpv",
+            "pose": [ 0.0, 0.0, 0.0, 1.57]
+        }
+    ]
+}
