@@ -1,0 +1,19 @@
+{
+    "world": "controller_tuning",
+    "drones": [
+        {
+            "model": "iris_fpv",
+            "pose": [ 0.0, 0.0, 0.0, 0.0]
+        }
+    ],
+    "objects": [
+        {
+            "model": "aruco_gate_1",
+            "pose": [10, -4.0, 0.0, 3.14]
+        },
+        {
+            "model": "aruco_gate_3",
+            "pose": [10, 4, 0, 0]
+        }
+    ]
+}
