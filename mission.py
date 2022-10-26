@@ -11,34 +11,32 @@ from as2_msgs.srv import SetSpeed
 from as2_msgs.msg import TrajectoryWaypoints
 import os
 
-drone_id = "drone_0"
+drone_id = "drone_sim_0"
 
 
 def drone_run(drone_interface):
 
-    takeoff_height = 10.0
-    takeoff_speed = 1.0
+    takeoff_height = 1.0
+    takeoff_speed = 0.5
     dim = 10.0
     height = 2.0
     speed = 10.0
     
     print(f"Start mission {drone_id}")
 
-    # drone_interface.offboard()
-    # print("OFFBOARD")
+    drone_interface.offboard()
+    print("OFFBOARD")
 
-    # drone_interface.arm()
-    # print("ARMED")
+    drone_interface.arm()
+    print("ARMED")
 
-    # drone_interface.takeoff(takeoff_height, speed=1.0)
-    # drone_interface.follow_path([[0.0, 0.0, takeoff_height]], speed=takeoff_speed)
-    # drone_interface.send_motion_reference_pose([0.0, 0.0, 10.0])
-    # drone_interface.send_motion_reference_pose([0.0, 0.0, height])
-    
     print(f"Take Off {drone_id}")
-    drone_interface.follow_path([[0.01, -4.01, height]], speed=takeoff_speed)
-    sleep(10.0)
+    # drone_interface.takeoff(takeoff_height, speed=0.5)
+    drone_interface.follow_path([[0.1, 0.0, takeoff_height]], speed=takeoff_speed)
+    # drone_interface.send_motion_reference_pose([0.0, 0.0, takeoff_height])
     print(f"Take Off {drone_id} done")
+    
+    # sleep(1.0)
     
     # drone_interface.send_motion_reference_pose([0.0, 0.0, takeoff_height])
     # sleep(4.0)
@@ -64,17 +62,17 @@ def drone_run(drone_interface):
     #     global_path = global_path + path
     
     
-    path = [
-        [10, -4, height],
-        [20,  0, height],
-        [10,  4, height],
-        [ 0,  0, height]]
-    global_path = []
-    for i in range(10):
-        global_path = global_path+path
-    global_path = global_path + [[0.0, -2.0, height]]
-    print(f"Start path {global_path}")
-    drone_interface.follow_path(global_path, speed=speed, yaw_mode=TrajectoryWaypoints.PATH_FACING)
+    # path = [
+    #     [10, -4, height],
+    #     [20,  0, height],
+    #     [10,  4, height],
+    #     [ 0,  0, height]]
+    # global_path = []
+    # for i in range(10):
+    #     global_path = global_path+path
+    # global_path = global_path + [[0.0, -2.0, height]]
+    # print(f"Start path {global_path}")
+    # drone_interface.follow_path(global_path, speed=speed, yaw_mode=TrajectoryWaypoints.PATH_FACING)
     
     # path = [
     #     [ dim, 0.0, height],
