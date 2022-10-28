@@ -11,7 +11,7 @@ from as2_msgs.srv import SetSpeed
 from as2_msgs.msg import TrajectoryWaypoints
 import os
 
-drone_id = "drone_sim_0"
+drone_id = "drone_sim_miguel_0"
 
 
 def drone_run(drone_interface):
@@ -32,7 +32,8 @@ def drone_run(drone_interface):
 
     print(f"Take Off {drone_id}")
     # drone_interface.takeoff(takeoff_height, speed=0.5)
-    drone_interface.follow_path([[0.1, 0.0, takeoff_height]], speed=takeoff_speed)
+    drone_interface.follow_path([[1.1, -3.0, 2],[4,5,5],[-4,-2,10]], speed=10, yaw_mode=TrajectoryWaypoints.PATH_FACING)
+    # drone_interface.follow_path([[1.1, -3.0, 2],[4,5,5]], speed=0.5, yaw_mode=TrajectoryWaypoints.KEEP_YAW)
     # drone_interface.send_motion_reference_pose([0.0, 0.0, takeoff_height])
     print(f"Take Off {drone_id} done")
     

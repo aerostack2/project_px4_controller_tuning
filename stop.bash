@@ -1,8 +1,8 @@
 #!/bin/bash
+tmux_exception="$1"
 
-drone_namespace=${AEROSTACK2_SIMULATION_DRONE_ID::-1}
-
-tmux ls | grep -Po "${drone_namespace}\d+" | xargs -I % sh -c 'tmux kill-session -t %'
-
-pkill -9 python
-pkill -9 python3
+if [[ $tmux_exception == "" ]]; then
+  tmux kill-server
+else
+  tmux ls | awk '{print $1}' | grep -v "^$tmux_exception:" | xargs -I % sh -c 'tmux kill-session -t %'
+fi
