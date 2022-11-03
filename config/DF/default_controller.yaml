@@ -2,7 +2,6 @@
   ros__parameters:
     mass: 0.82
     trajectory_control:
-      reset_integral: false
       antiwindup_cte: 1.0
       alpha: 0.1
       kp:
