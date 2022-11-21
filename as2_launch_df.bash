@@ -28,6 +28,7 @@ new_window 'controller_manager' "ros2 launch controller_manager controller_manag
 
 new_window 'pixhawk interface' "ros2 launch pixhawk_platform pixhawk_platform_launch.py \
     drone_id:=$drone_namespace \
+    namespace:=$drone_namespace \
     config:=config/DF/platform_default.yaml \
     simulation_mode:=true \
     use_sim_time:=$use_sim_time"

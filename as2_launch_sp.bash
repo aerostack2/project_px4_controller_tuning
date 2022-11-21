@@ -19,7 +19,7 @@ new_window 'RTPS interface' "micrortps_agent -t UDP -n $drone_namespace"
 new_window 'controller_manager' "ros2 launch controller_manager controller_manager_launch.py \
     drone_id:=$drone_namespace \
     namespace:=$drone_namespace \
-    use_bypass:=true \
+    use_bypass:=false \
     config:=config/SP/controller.yaml \
     use_sim_time:=true"
 
