@@ -9,4 +9,4 @@ export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:$MODEL_FOLDER
 WORLD_FOLDER="$GAZEBO_ASSETS/worlds"
 export GAZEBO_RESOURCE_PATH=$GAZEBO_ASSETS:$WORLD_FOLDER
 
-$SCRIPT_PATH/default_run.sh "${AEROSTACK_PROJECT}/simulation_config/gates.json"
+$SCRIPT_PATH/default_run.sh "${AEROSTACK_PROJECT}/simulation_config/default.json"
