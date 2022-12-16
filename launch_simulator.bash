@@ -1,8 +1,8 @@
 #!/bin/bash
 
 AEROSTACK_PROJECT=$(pwd)
-SCRIPT_PATH="${AEROSTACK2_PATH}/simulation/gazebo_assets/scripts"
-GAZEBO_ASSETS="${AEROSTACK2_PATH}/simulation/gazebo_assets"
+SCRIPT_PATH="${AEROSTACK2_PATH}/as2_simulation_assets/gazebo_assets/scripts"
+GAZEBO_ASSETS="${AEROSTACK2_PATH}/as2_simulation_assets/gazebo_assets"
 
 GAZEBO_MODEL_PATH="$GAZEBO_ASSETS/configs/gazebo/models"
 export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:$MODEL_FOLDER

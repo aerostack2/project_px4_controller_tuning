@@ -11,10 +11,10 @@ fi
 # Arguments
 drone_namespace=$1
 use_sim_time=true
-controller="SP"
+controller="speed_controller" # "differential_flatness" or "speed_controller"
 behavior_type="position"
 
-if [[ "$controller" == "DF" ]]
+if [[ "$controller" == "diferential" ]]
 then
     behavior_type="trajectory"
 fi
@@ -22,32 +22,36 @@ fi
 source ./utils/launch_tools.bash
 
 new_session $drone_namespace
+
 new_window 'RTPS interface' "micrortps_agent -t UDP -n $drone_namespace"
 
-new_window 'pixhawk interface' "ros2 launch pixhawk_platform pixhawk_platform_launch.py \
+new_window 'as2_pixhawk_platform' "ros2 launch as2_pixhawk_platform pixhawk_platform_launch.py \
     namespace:=$drone_namespace \
+    use_sim_time:=$use_sim_time \
     config:=config/platform_default.yaml \
-    simulation_mode:=true \
-    use_sim_time:=$use_sim_time"
+    simulation_mode:=true"
 
-new_window 'controller_manager' "ros2 launch controller_manager controller_manager_launch.py \
+new_window 'as2_controller_manager' "ros2 launch as2_controller_manager controller_manager_launch.py \
     namespace:=$drone_namespace \
+    use_sim_time:=$use_sim_time \
+    cmd_freq:=100.0 \
+    info_freq:=10.0 \
     use_bypass:=true \
-    config:=config/$controller/controller.yaml \
-    use_sim_time:=$use_sim_time"
+    plugin_name:=controller_plugin_${controller} \
+    plugin_config_file:=config/${controller}_controller.yaml"
 
-new_window 'state_estimator' "ros2 launch basic_state_estimator basic_state_estimator_launch.py \
+new_window 'as2_state_estimator' "ros2 launch as2_state_estimator state_estimator_launch.py \
     namespace:=$drone_namespace \
-    odom_only:=true \
-    use_sim_time:=$use_sim_time" 
+    use_sim_time:=$use_sim_time \
+    plugin_name:=as2_state_estimator_plugin_external_odom" 
 
-new_window 'basic_behaviours' "ros2 launch as2_basic_behaviors all_basic_behaviors_launch.py \
+new_window 'as2_platform_behaviors' "ros2 launch as2_platform_behaviors as2_platform_behaviors_launch.py \
     namespace:=$drone_namespace \
-    config_takeoff:=config/$behavior_type/takeoff_behaviour.yaml \
-    config_goto:=config/$behavior_type/goto_behaviour.yaml \
-    config_follow_path:=config/$behavior_type/follow_path_behaviour.yaml \
-    config_land:=config/land_behaviour.yaml \
-    use_sim_time:=$use_sim_time"
+    use_sim_time:=$use_sim_time \
+    follow_path_plugin_name:=follow_path_plugin_$behavior_type \
+    goto_plugin_name:=goto_plugin_$behavior_type \
+    takeoff_plugin_name:=takeoff_plugin_$behavior_type \
+    land_plugin_name:=land_plugin_speed"
 
 if [[ "$behavior_type" == "trajectory" ]]
 then
