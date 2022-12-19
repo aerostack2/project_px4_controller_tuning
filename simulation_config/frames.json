@@ -1,0 +1,10 @@
+{
+    "world": "frames",
+    "drones": [
+        {
+            "model": "iris_fpv",
+            "name": "drone_sim_0",
+            "pose": [ -0.05, 0.0, 0.0, 0.0]
+        }
+    ]
+}

@@ -3,7 +3,8 @@
     "drones": [
         {
             "model": "iris_fpv",
-            "pose": [ 0.0, 0.0, 0.0, 0.0]
+            "name": "drone_sim_0",
+            "pose": [ -0.05, 0.0, 0.0, 0.0]
         }
     ],
     "objects": [

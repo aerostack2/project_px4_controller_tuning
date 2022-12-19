@@ -1,140 +1,96 @@
 #!/bin/python3
 
-from urllib.request import pathname2url
-import rclpy
-import sys
-import numpy as np
-from time import sleep
-import threading
-from python_interface.drone_interface import DroneInterface
-from as2_msgs.srv import SetSpeed
-from as2_msgs.msg import TrajectoryWaypoints
 import os
+from time import sleep
+import rclpy
+from python_interface.drone_interface import DroneInterface
+from as2_msgs.msg import YawMode
 
-drone_id = "drone_sim_0"
 
+def drone_run(drone_interface: DroneInterface):
 
-def drone_run(drone_interface):
-
+    speed = 2.0
     takeoff_height = 1.0
-    takeoff_speed = 0.5
-    dim = 10.0
     height = 2.0
-    speed = 10.0
-    
-    print(f"Start mission {drone_id}")
 
+    sleep_time = 2.0
+    yaw_mode = YawMode()
+    yaw_mode.mode = YawMode.PATH_FACING
+
+    dim = 2.0
+    path = [
+        [dim, dim, height],
+        [dim, -dim, height],
+        [-dim, dim, height],
+        [-dim, -dim, height],
+        [0.0, 0.0, takeoff_height],
+    ]
+
+    print("Start mission")
+
+    ##### ARM OFFBOARD #####
     drone_interface.offboard()
-    print("OFFBOARD")
-
     drone_interface.arm()
-    print("ARMED")
 
-    print(f"Take Off {drone_id}")
-    # drone_interface.takeoff(takeoff_height, speed=0.5)
-    drone_interface.follow_path([[0.1, 0.0, takeoff_height]], speed=takeoff_speed)
-    # drone_interface.send_motion_reference_pose([0.0, 0.0, takeoff_height])
-    print(f"Take Off {drone_id} done")
-    
-    # sleep(1.0)
-    
-    # drone_interface.send_motion_reference_pose([0.0, 0.0, takeoff_height])
-    # sleep(4.0)
-    # drone_interface.send_motion_reference_twist([0.0, 0.0, 1.0])
+    ##### TAKE OFF #####
+    print("Take Off")
+    drone_interface.takeoff(takeoff_height, speed=1.0)
+    print("Take Off done")
+    sleep(sleep_time)
 
-    # sleep(20.0)
-    # drone_interface.follow_path([[0.0, 100, takeoff_height]], speed=takeoff_speed)
+    ##### FOLLOW PATH #####
+    sleep(sleep_time)
+    print(f"Follow path with path facing: [{path}]")
+    drone_interface.follow_path.follow_path_with_path_facing(path, speed)
+    print("Follow path done")
 
-    # drone_interface.follow_path([
-    #     [50, 50, 2],
-    #     [100, 100, 2]
-    #     ], speed=speed)
+    sleep(sleep_time)
+    print(f"Follow path with keep yaw: [{path}]")
+    drone_interface.follow_path.follow_path_with_keep_yaw(path, speed)
+    print("Follow path done")
 
-    
-    # path = [
-    #     [ dim,  dim, height],
-    #     [ dim, -dim, height],
-    #     [-dim,  dim, height],
-    #     [-dim, -dim, height],
-    #     [   0,    0, height]]
-    # global_path = []
-    # for i in range(20):
-    #     global_path = global_path + path
-    
-    
-    # path = [
-    #     [10, -4, height],
-    #     [20,  0, height],
-    #     [10,  4, height],
-    #     [ 0,  0, height]]
-    # global_path = []
-    # for i in range(10):
-    #     global_path = global_path+path
-    # global_path = global_path + [[0.0, -2.0, height]]
-    # print(f"Start path {global_path}")
-    # drone_interface.follow_path(global_path, speed=speed, yaw_mode=TrajectoryWaypoints.PATH_FACING)
-    
-    # path = [
-    #     [ dim, 0.0, height],
-    #     [-dim, 0.0, height],
-    #     [ dim, 0.0, height],
-    #     [-dim, 0.0, height],
-    #     [ 0.0, 0.0, height]]
-    
-    # for i in range(20):
-    #     print(f"Send path {drone_id}")
-    #     drone_interface.follow_path(path1, speed=speed)
-    #     print(f"Send path {drone_id} done")
-    #     sleep(10)
-    #     print(f"Send path {drone_id}")
-    #     drone_interface.follow_path(path2, speed=speed)
-    #     print(f"Send path {drone_id} done")
-    #     sleep(10)
+    sleep(sleep_time)
+    print(f"Follow path with angle {-1.57}: [{path}]")
+    drone_interface.follow_path.follow_path_with_yaw(path, speed, angle=-1.57)
+    print("Follow path done")
 
-    # path1 = [
-    #     [0.0, 0.0, height+1],
-    #     [0.0, 0.0, height+2],
-    # ]
-    
-    # path2 = [
-    #     [0.0, 0.0, height-1],
-    #     [0.0, 0.0, height-2],
-    # ]
-    # for i in range(20):
-    #     print(f"Send path {drone_id}")
-    #     drone_interface.follow_path(path1, speed=speed)
-    #     print(f"Send path {drone_id} done")
-    #     sleep(10)
-    #     print(f"Send path {drone_id}")
-    #     drone_interface.follow_path(path2, speed=speed)
-    #     print(f"Send path {drone_id} done")
-    #     sleep(10)
+    ##### GOTO #####
+    for goal in path:
+        print(f"Go to with path facing {goal}")
+        drone_interface.goto.go_to_point_path_facing(goal, speed=speed)
+        print("Go to done")
+    sleep(sleep_time)
 
-    # global_path = []
-    # for i in range(20):
-    #     global_path = global_path + path
+    for goal in path:
+        print(f"Go to with keep yaw {goal}")
+        drone_interface.goto.go_to_point(goal, speed=speed)
+        print("Go to done")
+    sleep(sleep_time)
 
-    # print(f"Send path {drone_id}")
-    # drone_interface.follow_path(global_path, speed=speed)
-    # print(f"Send path {drone_id} done")
+    for goal in path:
+        print(f"Go to with angle {-1.57}: {goal}")
+        drone_interface.goto.go_to_point_with_yaw(goal, speed=speed, angle=-1.57)
+        print("Go to done")
+    sleep(sleep_time)
 
-    # sleep(5)
-    # for i in range(20):
-    #     for wp in path:
-    #         print(f"Go to {drone_id}: [{wp[0]},{wp[1]},{height}]")
-    #         drone_interface.go_to_point(wp, speed=speed, ignore_yaw=True)
-    #         print(f"Go to {drone_id} done")
-    #         sleep(15.0)
+    ##### LAND #####
+    print("Landing")
+    drone_interface.land(speed=0.5)
+    print("Land done")
 
-    print("Clean exit")
+    drone_interface.disarm()
 
 
 if __name__ == '__main__':
     rclpy.init()
-    n_uavs = DroneInterface(drone_id, verbose=True)
+    # Get environment variable AEROSTACK2_SIMULATION_DRONE_ID
+    uav_name = os.environ['AEROSTACK2_SIMULATION_DRONE_ID']
+    uav = DroneInterface(uav_name, verbose=False, use_sim_time=True)
 
-    drone_run(n_uavs)
+    drone_run(uav)
 
-    n_uavs.shutdown()
+    uav.shutdown()
     rclpy.shutdown()
+
+    print("Clean exit")
     exit(0)
