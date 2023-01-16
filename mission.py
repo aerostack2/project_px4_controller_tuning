@@ -3,7 +3,7 @@
 import os
 from time import sleep
 import rclpy
-from python_interface.drone_interface import DroneInterface
+from as2_python_api.drone_interface import DroneInterface
 from as2_msgs.msg import YawMode
 
 
@@ -84,7 +84,7 @@ def drone_run(drone_interface: DroneInterface):
 if __name__ == '__main__':
     rclpy.init()
     # Get environment variable AEROSTACK2_SIMULATION_DRONE_ID
-    uav_name = os.environ['AEROSTACK2_SIMULATION_DRONE_ID']
+    uav_name = "drone_sim_0"
     uav = DroneInterface(uav_name, verbose=False, use_sim_time=True)
 
     drone_run(uav)
