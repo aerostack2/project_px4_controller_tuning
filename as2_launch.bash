@@ -11,7 +11,7 @@ use_sim_time=true
 controller="speed_controller" # "differential_flatness" or "speed_controller"
 behavior_type="position"
 
-if [[ "$controller" == "diferential" ]]
+if [[ "$controller" == "differential_flatness" ]]
 then
     behavior_type="trajectory"
 fi
@@ -41,7 +41,7 @@ new_window 'state_estimator' "ros2 launch as2_state_estimator state_estimator_la
     use_sim_time:=$use_sim_time \
     plugin_name:=external_odom"
 
-new_window 'behaviors' "ros2 launch as2_behaviors_motion motion_behaviors_launch.py \
+new_window 'behaviors' "ros2 launch as2_behaviors_motion movement_behaviors_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
     follow_path_plugin_name:=follow_path_plugin_$behavior_type \
