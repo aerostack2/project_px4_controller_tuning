@@ -41,7 +41,7 @@ new_window 'state_estimator' "ros2 launch as2_state_estimator state_estimator_la
     use_sim_time:=$use_sim_time \
     plugin_name:=external_odom"
 
-new_window 'behaviors' "ros2 launch as2_behaviors_motion movement_behaviors_launch.py \
+new_window 'behaviors' "ros2 launch as2_behaviors_motion motion_behaviors_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
     follow_path_plugin_name:=follow_path_plugin_$behavior_type \
