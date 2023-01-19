@@ -10,6 +10,8 @@ from geographic_msgs.msg import GeoPath
 
 def drone_run(drone_interface: DroneInterfaceGPS):
 
+    origin = [40.158194, -3.380795, 0]
+
     speed = 2.0
     takeoff_height = 1.0
     height = 2.0
@@ -28,8 +30,8 @@ def drone_run(drone_interface: DroneInterfaceGPS):
     ]
 
     print("Start mission")
-    
-    drone_interface.gps.set_origin([47.3977419, 8.5455933, 0.0])
+
+    drone_interface.gps.set_origin(origin)
 
     ##### ARM OFFBOARD #####
     drone_interface.offboard()
@@ -47,12 +49,15 @@ def drone_run(drone_interface: DroneInterfaceGPS):
     # drone_interface.follow_path()
     # print("Follow path done")
 
-    # ##### GOTO #####
-    for goal in path:
-        print(f"Go to with path facing {goal}")
-        drone_interface.goto.go_to_gps_point(goal, speed)
-        print("Go to done")
-    sleep(sleep_time)
+    # # ##### GOTO #####
+    # for goal in path:
+    #     print(f"Go to with path facing {goal}")
+    #     drone_interface.goto.go_to_gps_point(goal, speed)
+    #     print("Go to done")
+    # sleep(sleep_time)
+
+    drone_interface.goto.go_to_gps_point([40.158183, -3.380893, 2.0], 1.0)
+    drone_interface.goto.go_to_gps_point([40.158194, -3.380795, 2.0], 1.0)
 
     ##### LAND #####
     print("Landing")
@@ -66,7 +71,7 @@ if __name__ == '__main__':
     rclpy.init()
     # Get environment variable AEROSTACK2_SIMULATION_DRONE_ID
     uav_name = os.environ.get("AEROSTACK2_SIMULATION_DRONE_ID")
-    uav = DroneInterfaceGPS(uav_name, verbose=False, use_sim_time=True)
+    uav = DroneInterfaceGPS("drone_sim_0", verbose=False, use_sim_time=True)
 
     drone_run(uav)
 
