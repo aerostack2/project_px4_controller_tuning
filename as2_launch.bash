@@ -39,7 +39,8 @@ new_window 'controller' "ros2 launch as2_controller controller_launch.py \
 new_window 'state_estimator' "ros2 launch as2_state_estimator state_estimator_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
-    plugin_name:=external_odom"
+    plugin_name:=external_odom \
+    plugin_config_file:=config/default_state_estimator.yaml"
 
 new_window 'behaviors' "ros2 launch as2_behaviors_motion motion_behaviors_launch.py \
     namespace:=$drone_namespace \
@@ -47,7 +48,9 @@ new_window 'behaviors' "ros2 launch as2_behaviors_motion motion_behaviors_launch
     follow_path_plugin_name:=follow_path_plugin_$behavior_type \
     goto_plugin_name:=goto_plugin_$behavior_type \
     takeoff_plugin_name:=takeoff_plugin_$behavior_type \
-    land_plugin_name:=land_plugin_speed"
+    land_plugin_name:=land_plugin_speed \
+    goto_threshold:=0.2 \
+    takeoff_threshold:=0.2"
 
 if [[ "$behavior_type" == "trajectory" ]]
 then
