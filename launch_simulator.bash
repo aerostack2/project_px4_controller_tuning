@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export PX4_HOME_LAT=40.158194
-export PX4_HOME_LON=-3.380795
+export PX4_HOME_LAT=40.441055
+export PX4_HOME_LON=-3.688814
 export PX4_HOME_ALT=100
 
 AEROSTACK_PROJECT=$(pwd)

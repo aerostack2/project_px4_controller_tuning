@@ -8,10 +8,10 @@ fi
 # Arguments
 drone_namespace=$1
 use_sim_time=true
-controller="speed_controller" # "differential_flatness" or "speed_controller"
+controller="pid_speed_controller" # "differential_flatness_controller" or "pid_speed_controller"
 behavior_type="position"
 
-if [[ "$controller" == "differential_flatness" ]]
+if [[ "$controller" == "differential_flatness_controller" ]]
 then
     behavior_type="trajectory"
 fi
@@ -27,34 +27,34 @@ new_window 'platform' "ros2 launch as2_platform_pixhawk pixhawk_launch.py \
     use_sim_time:=$use_sim_time \
     config:=config/platform_default.yaml"
 
-new_window 'controller' "ros2 launch as2_controller controller_launch.py \
+new_window 'controller' "ros2 launch as2_motion_controller controller_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
     cmd_freq:=100.0 \
     info_freq:=10.0 \
     use_bypass:=true \
     plugin_name:=${controller} \
-    plugin_config_file:=config/${controller}_controller.yaml"
+    plugin_config_file:=config/${controller}.yaml"
 
 new_window 'state_estimator' "ros2 launch as2_state_estimator state_estimator_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
-    plugin_name:=external_odom \
+    plugin_name:=raw_odometry \
     plugin_config_file:=config/default_state_estimator.yaml"
 
 new_window 'behaviors' "ros2 launch as2_behaviors_motion motion_behaviors_launch.py \
     namespace:=$drone_namespace \
     use_sim_time:=$use_sim_time \
     follow_path_plugin_name:=follow_path_plugin_$behavior_type \
-    goto_plugin_name:=goto_plugin_$behavior_type \
+    go_to_plugin_name:=go_to_plugin_$behavior_type \
     takeoff_plugin_name:=takeoff_plugin_$behavior_type \
     land_plugin_name:=land_plugin_speed \
-    goto_threshold:=0.2 \
+    go_to_threshold:=0.2 \
     takeoff_threshold:=0.2"
 
 if [[ "$behavior_type" == "trajectory" ]]
 then
-    new_window 'traj_generator' "ros2 launch as2_behaviors_trajectory_generator dynamic_polynomial_generator_launch.py  \
+    new_window 'traj_generator' "ros2 launch as2_behaviors_trajectory_generation generate_polynomial_trajectory_behavior_launch.py  \
         namespace:=$drone_namespace \
         use_sim_time:=$use_sim_time"
 fi
