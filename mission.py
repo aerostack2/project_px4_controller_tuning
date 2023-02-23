@@ -1,11 +1,9 @@
 #!/bin/python3
 
-import os
 from time import sleep
 import rclpy
 from as2_python_api.drone_interface_gps import DroneInterfaceGPS
 from as2_msgs.msg import YawMode
-from geographic_msgs.msg import GeoPath
 
 
 def drone_run(drone_interface: DroneInterfaceGPS):
@@ -44,20 +42,20 @@ def drone_run(drone_interface: DroneInterfaceGPS):
     sleep(sleep_time)
 
     ##### FOLLOW PATH #####
-    # sleep(sleep_time)
-    # print(f"Follow path with path facing: [{path}]")
-    # drone_interface.follow_path()
-    # print("Follow path done")
+    sleep(sleep_time)
+    print(f"Follow path with path facing: [{path}]")
+    drone_interface.follow_path()
+    print("Follow path done")
 
-    # # ##### GOTO #####
-    # for goal in path:
-    #     print(f"Go to with path facing {goal}")
-    #     drone_interface.goto.go_to_gps_point(goal, speed)
-    #     print("Go to done")
-    # sleep(sleep_time)
+    # ##### GO TO #####
+    for goal in path:
+        print(f"Go to with path facing {goal}")
+        drone_interface.go_to.go_to_gps_point(goal, speed)
+        print("Go to done")
+    sleep(sleep_time)
 
-    drone_interface.goto.go_to_gps_point([40.158183, -3.380893, 2.0], 1.0)
-    drone_interface.goto.go_to_gps_point([40.158194, -3.380795, 2.0], 1.0)
+    drone_interface.go_to.go_to_gps_point([40.158183, -3.380893, 2.0], 1.0)
+    drone_interface.go_to.go_to_gps_point([40.158194, -3.380795, 2.0], 1.0)
 
     ##### LAND #####
     print("Landing")
@@ -69,8 +67,6 @@ def drone_run(drone_interface: DroneInterfaceGPS):
 
 if __name__ == '__main__':
     rclpy.init()
-    # Get environment variable AEROSTACK2_SIMULATION_DRONE_ID
-    uav_name = os.environ.get("AEROSTACK2_SIMULATION_DRONE_ID")
     uav = DroneInterfaceGPS("drone_sim_0", verbose=False, use_sim_time=True)
 
     drone_run(uav)
